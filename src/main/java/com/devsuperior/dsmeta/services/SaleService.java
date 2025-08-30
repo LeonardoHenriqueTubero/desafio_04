@@ -3,10 +3,12 @@ package com.devsuperior.dsmeta.services;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import com.devsuperior.dsmeta.dto.SalesReportDTO;
+import com.devsuperior.dsmeta.dto.SalesSummaryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,5 +36,12 @@ public class SaleService {
         LocalDate startDate = (Objects.equals(minDate, "")) ? finishDate.minusYears(1L) : LocalDate.parse(minDate);
 
         return repository.report(startDate, finishDate, name, pageable);
+    }
+
+    public List<SalesSummaryDTO> summary(String minDate, String maxDate, Pageable pageable) {
+        LocalDate finishDate = (Objects.equals(maxDate, "")) ? LocalDate.ofInstant(Instant.now(), ZoneId.systemDefault()) : LocalDate.parse(maxDate);
+        LocalDate startDate = (Objects.equals(minDate, "")) ? finishDate.minusYears(1L) : LocalDate.parse(minDate);
+
+        return repository.summary(startDate, finishDate, pageable);
     }
 }
